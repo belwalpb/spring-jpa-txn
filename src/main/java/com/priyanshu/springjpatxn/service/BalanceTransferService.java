@@ -16,14 +16,14 @@ public class BalanceTransferService {
     @Autowired
     private WalletTransactionRepository walletTransactionsRepository;
 
-    public void transferAmount(long sourceWallet, long destWallet, double amount) {
+    public synchronized  void transferAmount(long sourceWallet, long destWallet, double amount) {
         UserWallet source = userWalletRepository.findById(sourceWallet)
                 .orElseThrow(() -> new IllegalArgumentException("Source Wallet Not Found"));
         UserWallet destination = userWalletRepository.findById(destWallet)
                 .orElseThrow(() -> new IllegalArgumentException("Destination Wallet Not Found"));
 
         changeAmount(source, - amount);
-        changeAmount(destination, amount);
+         changeAmount(destination, amount);
     }
 
     private void changeAmount(UserWallet wallet, double amount) {
