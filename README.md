@@ -14,8 +14,25 @@
 
 **WalletTransaction Entity:** This entity will hold the credit/debit transaction logs.
 
-## Case-1 Implementation Without any synchronization/transactions:
+## Step-1: Implementation Without any synchronization/transactions:
 **Branch:** main
 
 In this case the application works fine, if there is any one request at a time for credit/debit. In case of parallel requests for credit/debit from same wallets, the application will malfunction.
 
+
+## Step-2: Make the BalanceTransferService.transferAmount method synchronized
+**Branch:** feature/step-2
+
+Advantages:
+1. It will ensure that the `BalanceTransferService.transferAmount` method is being called by only one thread at a time.
+
+Drawbacks:
+1. In case of multiple instances of same application, it will not work.
+2. It will unnecessary hold all the requests. e.g. We are receiving 2 requests, Wallet1->Wallet2(Amount=50) and Wallet3->Wallet4(Amount=10). In this case second request have to unnecessary wait, which does not have any concurrency impact on request1.
+
+Conclusion:
+This method also can't be used in modern applications.
+
+
+## Step-3: Take the `PESSIMISTIC_WRITE` Lock on the Rows, which we are trying to update. In this case, database will first lock both the rows and then only the transaction will proceed further. Other requests, which are on same rows, will wait until one request completes its transaction.
+**Branch:** feature/step-3
