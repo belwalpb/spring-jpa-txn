@@ -29,7 +29,7 @@ public class BalanceTransferService {
          changeAmount(destination, amount);
     }
 
-    @Transactional(propagation = Propagation.MANDATORY)
+
     private void changeAmount(UserWallet wallet, double amount) {
         double initialAmount = wallet.getWalletAmount();
         double finalAmount = initialAmount + amount;
