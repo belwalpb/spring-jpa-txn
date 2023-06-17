@@ -32,3 +32,6 @@ Drawbacks:
 
 Conclusion:
 This method also can't be used in modern applications.
+
+
+## Step-3: Take the `PESSIMISTIC_WRITE` Lock on the Rows, which we are trying to update. In this case, database will first lock both the rows and then only the transaction will proceed further. Other requests, which are on same rows, will wait until one request completes its transaction.
